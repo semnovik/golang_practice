@@ -1,44 +1,46 @@
-package main
+package hw02unpackstring
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
-	"unicode/utf8"
 )
 
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(str string) (string, error) {
-	var newStr string
-	strLen := utf8.RuneCountInString(str)
-
-	for i := 0; i <= strLen; i++ {
-		fmt.Println(str[i])
-	}
-
-	return newStr, nil
-}
-
-func main() {
-	var str = "a4bc2d5e"
+	var got = []rune(str)
 	var newStr = ""
-	var cache = ""
-	strLen := utf8.RuneCountInString(str)
+	var cachedSymbol = ""
 
-	for i := 0; i < strLen; i++ {
+	for i := 0; i < len(got); i++ {
+		symbol := got[i]
 
-		if unicode.IsDigit(rune(str[i])) == true {
-			num, _ := strconv.Atoi(string(str[i]))
-			fmt.Println("Тут цифра", num)
-			newStr += strings.Repeat(cache, num-1)
-		} else {
-			cache = string(str[i])
-			newStr += cache
-			fmt.Println(newStr)
+		switch {
+
+		// Проверяем, что первый символ не цифра
+		case i == 0 && unicode.IsDigit(symbol):
+			return "", ErrInvalidString
+
+		//Проверяем, что нет двухзначных цифр
+		case unicode.IsDigit(symbol) && unicode.IsDigit(rune(got[i-1])):
+			return "", ErrInvalidString
+
+		//Если в строке содержится 0
+		case symbol == 48:
+			newStr = strings.Replace(newStr, cachedSymbol, "", 1)
+
+		//Если цифра после буквы
+		case unicode.IsDigit(symbol) && symbol != 48:
+			num, _ := strconv.Atoi(string(got[i]))
+			newStr += strings.Repeat(cachedSymbol, num-1)
+
+		//Если буква
+		case !unicode.IsDigit(symbol):
+			cachedSymbol = string(got[i])
+			newStr += cachedSymbol
 		}
 	}
-
+	return newStr, nil
 }
