@@ -10,9 +10,9 @@ import (
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(str string) (string, error) {
-	var got = []rune(str)
-	var newStr = ""
-	var cachedSymbol = ""
+	got := []rune(str)
+	newStr := ""
+	cachedSymbol := ""
 
 	for i := 0; i < len(got); i++ {
 		symbol := got[i]
