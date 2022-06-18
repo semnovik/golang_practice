@@ -29,7 +29,10 @@ func Unpack(str string) (string, error) {
 			newStr = strings.Replace(newStr, cachedSymbol, "", 1)
 		// Если цифра после буквы
 		case unicode.IsDigit(symbol) && symbol != 48:
-			num, _ := strconv.Atoi(string(symbol))
+			num, err := strconv.Atoi(string(symbol))
+			if err != nil {
+				return "", err
+			}
 			newStr += strings.Repeat(cachedSymbol, num-1)
 		// Если буква
 		case !unicode.IsDigit(symbol):
