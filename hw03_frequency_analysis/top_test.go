@@ -58,7 +58,7 @@ func TestTop10(t *testing.T) {
 	})
 
 	t.Run("only spaces", func(t *testing.T) {
-		require.Equal(t, []string(nil), Top10("             "))
+		require.Equal(t, []string{}, Top10("             "))
 	})
 
 	t.Run("only spaces", func(t *testing.T) {
