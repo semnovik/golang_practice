@@ -9,13 +9,14 @@ func Top10(text string) []string {
 	// Делим слова в строке, помещаем в список
 	splitText := strings.Fields(text)
 	wordAmountMap := make(map[string]int)
-	counter := 0
+	var sortedList []sorted
 
 	// Берем слово и считаем количество вхождений в список
+	counter := 0
 	for _, w := range splitText {
 		for _, v := range splitText {
 			if w == v {
-				counter += 1
+				counter++
 			}
 		}
 		wordAmountMap[w] = counter
@@ -23,7 +24,6 @@ func Top10(text string) []string {
 	}
 
 	// Помещаем список солов и количество повторений в список структур
-	var sortedList []sorted
 	for k, v := range wordAmountMap {
 		sortedList = append(sortedList, sorted{k, v})
 	}
@@ -43,14 +43,15 @@ func sortMyList(list []sorted) []sorted {
 }
 
 func lengthCorrection(sortedList []sorted) []string {
-	wordsAmount := 0
+	var wordsAmount int
+	var list []string
+
 	if len(sortedList) < 10 {
 		wordsAmount = len(sortedList)
 	} else {
 		wordsAmount = 10
 	}
 
-	var list []string
 	for i := range sortedList[:wordsAmount] {
 		list = append(list, sortedList[i].word)
 	}
