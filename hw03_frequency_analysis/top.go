@@ -22,7 +22,7 @@ func Top10(text string) []string {
 		counter = 0
 	}
 
-	var sortedList = make([]sorted, 0, len(wordAmountMap))
+	sortedList := make([]sorted, 0, len(wordAmountMap))
 	// Помещаем список солов и количество повторений в список структур
 	for k, v := range wordAmountMap {
 		sortedList = append(sortedList, sorted{k, v})
@@ -51,7 +51,7 @@ func lengthCorrection(sortedList []sorted) []string {
 		wordsAmount = 10
 	}
 
-	var list = make([]string, 0, len(sortedList[:wordsAmount]))
+	list := make([]string, 0, len(sortedList[:wordsAmount]))
 	for i := range sortedList[:wordsAmount] {
 		list = append(list, sortedList[i].word)
 	}
