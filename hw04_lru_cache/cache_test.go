@@ -50,7 +50,78 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		// Выталкивание элементов из-за размера очереди
+
+		c := NewCache(3)
+
+		wasInCacheFirst := c.Set("first", 100)
+		require.False(t, wasInCacheFirst)
+
+		wasInCacheSecond := c.Set("second", 200)
+		require.False(t, wasInCacheSecond)
+
+		wasInCacheThird := c.Set("third", 300)
+		require.False(t, wasInCacheThird)
+
+		wasInCacheFourth := c.Set("fourth", 400)
+		require.False(t, wasInCacheFourth)
+
+		item, getFirst := c.Get("first")
+		require.Equal(t, nil, item)
+		require.False(t, getFirst)
+	})
+
+	t.Run("purge LRU logic", func(t *testing.T) {
+		// Выталкивание давно используемых элементов
+
+		c := NewCache(3)
+		// Добавляем 3 объекта в кэш
+		wasInCache := c.Set("aaa", 100)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("bbb", 200)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("ccc", 300)
+		require.False(t, wasInCache)
+
+		// Два из них запрашиваем
+		value, inIt := c.Get("aaa")
+		require.Equal(t, 100, value)
+		require.True(t, inIt)
+
+		value, inIt = c.Get("ccc")
+		require.Equal(t, 300, value)
+		require.True(t, inIt)
+
+		// Добавляем новый объект в кэш, он переполняется -> элемент, с которым дольше всего не работали, удаляется из кэша
+		wasInCache = c.Set("ddd", 400)
+		require.False(t, wasInCache)
+
+		// Запрашиваем удаленный элемент
+		item, inIt := c.Get("bbb")
+		require.False(t, inIt)
+		require.Equal(t, nil, item)
+	})
+
+	t.Run("Clear cache", func(t *testing.T) {
+		c := NewCache(3)
+		c.Set("first", 100)
+		c.Set("second", 200)
+		c.Set("third", 300)
+		c.Clear()
+
+		first, inIt := c.Get("first")
+		require.False(t, inIt)
+		require.Equal(t, nil, first)
+
+		second, inIt := c.Get("second")
+		require.False(t, inIt)
+		require.Equal(t, nil, second)
+
+		third, inIt := c.Get("third")
+		require.False(t, inIt)
+		require.Equal(t, nil, third)
 	})
 }
 
