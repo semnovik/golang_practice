@@ -35,9 +35,11 @@ func (l *list) MoveToFront(i *ListItem) {
 		l.head = i
 	case i.Prev != nil && i.Next == nil:
 		i.Prev.Next = nil
-		l.Front().Prev = i
+		l.tail = i.Prev
+		cacheFront := l.Front()
+		cacheFront.Prev = i
 		i.Prev = nil
-		i.Next = l.Front()
+		i.Next = cacheFront
 		l.head = i
 	}
 }
@@ -48,6 +50,9 @@ func (l *list) Remove(i *ListItem) {
 		l.head = i.Next
 	case i.Next == nil:
 		l.tail = i.Prev
+		i.Prev.Next = nil
+		l.length--
+		break
 	case i.Prev != nil:
 		i.Prev.Next = i.Next
 	case i.Next != nil:
@@ -69,9 +74,8 @@ func (l *list) PushFront(v interface{}) *ListItem {
 	case l.head != nil && l.tail == nil:
 		cache := l.head
 		l.tail = cache
-		l.tail.Prev = l.head
-
 		l.head = node
+		l.tail.Prev = l.head
 		l.head.Next = l.tail
 	case l.head != nil && l.tail != nil:
 		l.head.Prev = node

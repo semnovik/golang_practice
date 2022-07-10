@@ -7,6 +7,19 @@ import (
 )
 
 func TestList(t *testing.T) {
+	t.Run("Correct addresses after moving", func(t *testing.T) {
+		l := NewList()
+		a := l.PushFront("aaa")
+		l.PushFront("bbb")
+		l.PushFront("ccc")
+
+		l.MoveToFront(a)
+		require.Equal(t, "bbb", l.Back().Value)
+		require.Equal(t, "aaa", l.Front().Value)
+		require.Equal(t, "ccc", l.Front().Next.Value)
+		require.Equal(t, "ccc", l.Back().Prev.Value)
+	})
+
 	t.Run("empty list", func(t *testing.T) {
 		l := NewList()
 
