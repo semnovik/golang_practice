@@ -69,7 +69,6 @@ func TestCache(t *testing.T) {
 		item, getFirst := c.Get("first")
 		require.Equal(t, nil, item)
 		require.False(t, getFirst)
-
 	})
 
 	t.Run("purge LRU logic", func(t *testing.T) {
@@ -103,7 +102,6 @@ func TestCache(t *testing.T) {
 		item, inIt := c.Get("bbb")
 		require.False(t, inIt)
 		require.Equal(t, nil, item)
-
 	})
 
 	t.Run("Clear cache", func(t *testing.T) {
@@ -124,7 +122,6 @@ func TestCache(t *testing.T) {
 		third, inIt := c.Get("third")
 		require.False(t, inIt)
 		require.Equal(t, nil, third)
-
 	})
 }
 
