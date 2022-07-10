@@ -40,7 +40,6 @@ func (cache *lruCache) Set(key Key, value interface{}) bool {
 				}
 			}
 			cache.queue.Remove(cache.queue.Back())
-
 		}
 		cache.items[key] = cache.queue.PushFront(value)
 	}
@@ -48,13 +47,11 @@ func (cache *lruCache) Set(key Key, value interface{}) bool {
 }
 
 func (cache *lruCache) Get(key Key) (interface{}, bool) {
-	_, inIt := cache.items[key]
-	if inIt {
+	if _, inIt := cache.items[key]; inIt {
 		cache.queue.MoveToFront(cache.items[key])
 		return cache.items[key].Value, true
-	} else {
-		return nil, false
 	}
+	return nil, false
 }
 
 func (cache *lruCache) Clear() {

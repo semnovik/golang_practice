@@ -52,7 +52,6 @@ func (l *list) Remove(i *ListItem) {
 		l.tail = i.Prev
 		i.Prev.Next = nil
 		l.length--
-		break
 	case i.Prev != nil:
 		i.Prev.Next = i.Next
 	case i.Next != nil:
@@ -82,7 +81,6 @@ func (l *list) PushFront(v interface{}) *ListItem {
 		cacheHead := l.head
 		l.head = node
 		l.head.Next = cacheHead
-
 	}
 	l.length++
 	return node
